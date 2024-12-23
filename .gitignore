@@ -1,0 +1,36 @@
+# Node.js (Angular)
+node_modules/
+dist/
+.tmp/
+
+# Angular build files (production)
+angular-*.json
+
+# Python (Flask)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.env
+
+# Flask configurations (local settings, virtualenv)
+instance/
+*.db
+*.sqlite3
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Misc
+*.swp

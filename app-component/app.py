@@ -11,5 +11,10 @@ def process_qr_code():
     print("Received QR Code:", qr_data)
     return jsonify({"message": "QR Code processed successfully", "data": qr_data})
 
+@app.route('/api/test', methods=['GET'])
+def test():
+    return jsonify({"message": "hello there",
+                    "description": "general kenobi"})
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

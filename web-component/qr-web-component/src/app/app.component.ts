@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { WelcomeComponent } from "./pages/welcome/welcome.component";
+import { WelcomeComponent } from "./components/welcome/welcome.component";
 import { HttpClient } from '@angular/common/http';
 
 @Component({

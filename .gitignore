@@ -36,4 +36,4 @@ Thumbs.db
 *.swp
 
 # environment files
-app.env
+*.env

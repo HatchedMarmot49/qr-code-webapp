@@ -36,7 +36,19 @@ def test():
 def getItems():
     aivencursor.execute("select * from items")
     results = aivencursor.fetchall()
-    return results
+    # return results
+    return [
+  [
+    "Root",
+    "Board Game",
+    "Light Blue",
+    "Warehouse",
+    "Luke Lundell",
+    50,
+    0
+  ]
+]
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

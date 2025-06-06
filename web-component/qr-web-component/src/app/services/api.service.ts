@@ -7,7 +7,8 @@ import { Observable } from 'rxjs';
 })
 export class ApiService {
 
-  private api_url = "/api/test"
+  private api_test = "/api/test"
+  private api_items = "/api/items"
 
   constructor(private http: HttpClient ) {
 
@@ -15,7 +16,11 @@ export class ApiService {
 
 
   getTestMessage(): Observable<any>{
-    return this.http.get<any>(this.api_url);
+    return this.http.get<any>(this.api_test);
+  }
+
+  getInventoryTable(): Observable<any>{
+    return this.http.get<any>(this.api_items);
   }
 }
 

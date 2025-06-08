@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import mysql.connector
 import configparser
+import re
 
 app = Flask(__name__)
 CORS(app)
@@ -36,19 +37,31 @@ def test():
 def getItems():
     aivencursor.execute("select * from items")
     results = aivencursor.fetchall()
-    # return results
-    return [
-  [
-    "Root",
-    "Board Game",
-    "Light Blue",
-    "Warehouse",
-    "Luke Lundell",
-    50,
-    0
-  ]
-]
+    return results
 
+# helper method for formatting sql column, value pairs
+def columnValues (col, val):
+  return "{0} = '{1}'".format(col, val)
+
+# endpoint to update a particular item record in db
+@app.route('/api/item/<name>', methods=['PUT'])
+def updateItem(name):
+  name = re.sub(r'[^a-zA-Z0-9]', '', name)
+
+  # retrieve request body
+  updatesNeeded = request.json
+
+  # map columns to update with values to update in sql parseable manner
+  colValues = map(columnValues, updatesNeeded.keys(), updatesNeeded.values())
+  colValuesList = list(colValues)
+  updateSetList = ', '.join(colValuesList)
+
+  try :
+    sqlquery = "update items set {0} where Name = '{1}'".format(updateSetList, name)
+  except Exception as e:
+    print("sql update failed : {}".format(e))
+
+  return "finished"
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

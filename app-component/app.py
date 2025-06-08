@@ -20,6 +20,7 @@ aivendb = mysql.connector.connect(
     database=config.get('DB','DATABASE'))
 aivencursor = aivendb.cursor()
 
+
 @app.route('/api/qr-code', methods=['POST'])
 def process_qr_code():
     data = request.get_json()
@@ -27,10 +28,12 @@ def process_qr_code():
     print("Received QR Code:", qr_data)
     return jsonify({"message": "QR Code processed successfully", "data": qr_data})
 
+
 @app.route('/api/test', methods=['GET'])
 def test():
     return jsonify({"message": "hello there",
                     "description": "general kenobi"})
+
 
 # endpoint to retrieve all item records from db
 @app.route('/api/items', methods=['GET'])
@@ -39,9 +42,26 @@ def getItems():
     results = aivencursor.fetchall()
     return results
 
+
+# endpoint to get a particular item record from db
+@app.route('/api/item/<name>', methods=['GET'])
+def getItem(name):
+  name = re.sub(r'[^a-zA-Z0-9]', '', name)
+  try :
+    sqlquery = "select * from items where Name = '{}'".format(name)
+    aivencursor.execute(sqlquery)
+    result = aivencursor.fetchall()
+    return result
+
+  except Exception as e:
+    print("sql get failed : {}".format(e))
+  return "get failed"
+
+
 # helper method for formatting sql column, value pairs
 def columnValues (col, val):
   return "{0} = '{1}'".format(col, val)
+
 
 # endpoint to update a particular item record in db
 @app.route('/api/item/<name>', methods=['PUT'])
@@ -58,10 +78,42 @@ def updateItem(name):
 
   try :
     sqlquery = "update items set {0} where Name = '{1}'".format(updateSetList, name)
+    aivencursor.execute(sqlquery)
   except Exception as e:
     print("sql update failed : {}".format(e))
-
   return "finished"
+
+
+# endpoint to create a new item record in db
+@app.route('/api/item', methods=['POST'])
+def createItem():
+  createNeeded = request.json
+  cols = createNeeded.keys()
+  vals = createNeeded.values()
+  createColsInsertList = ', '.join(cols)
+  createVolsInsertList = ', '.join(map(lambda elem : "'{}'".format(elem), vals))
+
+  try:
+    sqlquery = "insert into items ({0}) values ({1})".format(createColsInsertList, createVolsInsertList)
+    aivencursor.execute(sqlquery)
+
+  except Exception as e:
+    print("sql insert failed : {}".format(e))
+  return "finished"
+
+
+# endpoint to delete a particular item record from db
+@app.route('/api/item/<name>', methods=['DELETE'])
+def deleteItem(name):
+  name = re.sub(r'[^a-zA-Z0-9]', '', name)
+  try :
+    sqlquery = "delete from items where Name = '{}'".format(name)
+    aivencursor.execute(sqlquery)
+
+  except Exception as e:
+    print("sql delete failed : {}".format(e))
+  return "finished"
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

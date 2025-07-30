@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { WelcomeComponent } from "./components/welcome/welcome.component";
 import { TableComponent } from './components/table/table.component';
+import { NavComponent } from './components/nav/nav.component';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, WelcomeComponent, TableComponent],
+  imports: [RouterOutlet, TableComponent, NavComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
